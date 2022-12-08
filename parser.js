@@ -83,13 +83,13 @@ function paidby(
 function owe(
   amount,
   comment,
-  payer,
+  lender,
   toAccount,
   toGroup,
   debtGroup = "",
   currency = defaultCurrency
 ) {
-  let parse = `owe,${comment},${payer},${debtGroup},${amount},${currency},${toAccount},${toGroup} `;
+  let parse = `owe,${comment},${lender},${debtGroup},${amount},${currency},${toAccount},${toGroup} `;
   return parse;
 }
 
@@ -148,6 +148,35 @@ function buy(
   return parse;
 }
 
+/** MOVE
+ * Move money/assets between accounts or groups
+ * ex: move, 1, Binance, Tokocrypto, BTC
+ * ex: move, 200, Mandiri, BCA
+ * A swap is what you get in return from selling an asset.
+ * @param float amount
+ * @param string from
+ * @param string to
+ * @param string (optional) currency
+ * @param string (optional) comment
+ */
+
+function move(
+  amount,
+  moveAccount = true,
+  from,
+  to,
+  currency = defaultCurrency,
+  comment = ""
+) {
+  if (moveAccount === true) {
+    let parse = `move,${comment},${from},,${amount},${currency},${to}`;
+    return parse;
+  } else {
+    let parse = `move,${comment},,${from},${amount},${currency},,${to}`;
+    return parse;
+  }
+}
+
 /** SELL
  * Money from the average buy price of liquidated assets. Returns two entries.
  * ex: sell, 1, BTC, 2000, IDR, sold all my BTC, Binance, House, Binance, (House), 1000 = ABP
@@ -192,17 +221,7 @@ function sell(
   return parse;
 }
 
-let a = sell(
-  1,
-  "BTC",
-  2000,
-  "IDR",
-  "sold all my BTC",
-  "Binance",
-  "House",
-  "Binance",
-  "(House)",
-  1000
-);
-console.log(a.a);
-console.log(a.b);
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+let a = buy(1000, "comment", "Tokocrypto", "House", "(House)", "BTC", 2);
+console.log(a);
