@@ -143,7 +143,7 @@ function buy(
   assetLocation = fromAccount,
   currency = defaultCurrency
 ) {
-  let swapID = `${currency}/${asset}/${fromGroup}`;
+  let swapID = `${currency}/${asset}/${toGroup}`;
   let parse = `buy,${comment},${fromAccount},${fromGroup},${amount},${currency},${assetLocation},${toGroup},${assetAmount},${asset},${swapID}`;
   return parse;
 }
@@ -205,7 +205,7 @@ function sell(
   swapGroup,
   averageBuyPrice
 ) {
-  let swapID = `${swapType}/${assetType}/${swapGroup}`;
+  let swapID = `${swapType}/${assetType}/${assetGroup}`;
   let revenue = assetAmount * averageBuyPrice;
   let clusterID = Math.floor(Math.random() * 100);
   if (revenue < swapAmount) {
@@ -218,10 +218,23 @@ function sell(
     a: `sell, ${comment},${assetLocation},${assetGroup},${assetAmount},${assetType},${swapLocation},${swapGroup},${revenue},${swapType},${swapID},${clusterID}`,
     b: `${profit}, ${comment},,,,,${swapLocation},${swapGroup},${swapAmount},${swapType},${swapID},${clusterID}`,
   };
-  return parse;
+  return JSON.stringify(parse);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-let a = buy(1000, "comment", "Tokocrypto", "House", "(House)", "BTC", 2);
-console.log(a);
+let b = sell(
+  1,
+  "BTC",
+  300000,
+  "IDR",
+  "SELL template A",
+  "Tokocrypto",
+  "House",
+  "Tokocrypto",
+  "(House)",
+  300000
+);
+
+console.log(b.a);
+console.log(b.b);
