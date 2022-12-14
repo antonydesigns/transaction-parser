@@ -156,8 +156,8 @@ function buy(
  * @param float amount
  * @param string from
  * @param string to
- * @param string (optional) currency
  * @param string (optional) comment
+ * @param string (optional) currency
  */
 
 function move(
@@ -165,8 +165,8 @@ function move(
   moveAccount = true,
   from,
   to,
-  currency = defaultCurrency,
-  comment = ""
+  comment = "",
+  currency = defaultCurrency
 ) {
   if (moveAccount === true) {
     let parse = `move,${comment},${from},,${amount},${currency},${to}`;
@@ -208,33 +208,22 @@ function sell(
   let swapID = `${swapType}/${assetType}/${assetGroup}`;
   let revenue = assetAmount * averageBuyPrice;
   let clusterID = Math.floor(Math.random() * 100);
-  if (revenue < swapAmount) {
+  if (revenue <= swapAmount) {
     profit = "profit";
   } else {
     profit = "loss";
-    return profit;
   }
   let parse = {
     a: `sell, ${comment},${assetLocation},${assetGroup},${assetAmount},${assetType},${swapLocation},${swapGroup},${revenue},${swapType},${swapID},${clusterID}`,
-    b: `${profit}, ${comment},,,,,${swapLocation},${swapGroup},${swapAmount},${swapType},${swapID},${clusterID}`,
+    b: `${profit}, ${comment},,,,,${swapLocation},${swapGroup},${
+      swapAmount - revenue
+    },${swapType},${swapID},${clusterID}`,
   };
-  return JSON.stringify(parse);
+  return parse;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-let b = sell(
-  1,
-  "BTC",
-  300000,
-  "IDR",
-  "SELL template A",
-  "Tokocrypto",
-  "House",
-  "Tokocrypto",
-  "(House)",
-  300000
-);
+let b = paidby(20, "template", "Marco", "Food", "Ops");
 
-console.log(b.a);
-console.log(b.b);
+console.log(b);
